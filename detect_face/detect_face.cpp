@@ -5,19 +5,16 @@
 #include <iostream>
 #include <stdio.h>
 
-using namespace std;
-using namespace cv;
-
 // Function Headers
-void detectAndDisplay(Mat frame);
+void detectAndDisplay(cv::Mat frame);
 
 // Global variables
 // Copy this file from opencv/data/haarscascades to target folder
-string face_cascade_name = "haarcascade_mcs_eyepair_big.xml";
-CascadeClassifier face_cascade;
-string window_name = "Capture - Face detection";
+std::string face_cascade_name = "haarcascade_frontalface_alt.xml";
+cv::CascadeClassifier face_cascade;
+std::string window_name = "Capture - Face detection";
 int filenumber; // Number of file to be saved
-string filename;
+std::string filename;
 
 // Function main
 int main(void)
@@ -29,12 +26,27 @@ int main(void)
         return (-1);
     };
 
-    // Read the image file
-    Mat frame = imread("/nfs/zfs-student-3/users/2013_paris/vlehuger/openProject/resource/dcojan.jpg");
+    cv::VideoCapture cap(0);
+
+    if ( !cap.isOpened() )  // if not success, exit program
+    {
+         std::cout << "Cannot open the video file" << std::endl;
+         return -1;
+    }
+
+
+    cv::Mat frame;
+    bool bSuccess;
 
     for (;;)
     {
-        // Apply the classifier to the frame
+        bSuccess = cap.read(frame);
+        if (!bSuccess)
+        {
+            std::cout << "Error when reading next frame" << std::endl;
+            exit(-1);
+        }
+
         if (!frame.empty())
         {
             detectAndDisplay(frame);
@@ -42,36 +54,39 @@ int main(void)
         else
         {
             printf(" --(!) No captured frame -- Break!");
-            break;
+            // break;
         }
 
-        int c = waitKey(10);
+        int c = cv::waitKey(10);
 
         if (27 == char(c))
         {
             break;
         }
+
+
     }
 
-    return 0;
+    return (0);
 }
 
 // Function detectAndDisplay
-void detectAndDisplay(Mat frame)
+void detectAndDisplay(cv::Mat frame)
 {
-    std::vector<Rect> faces;
-    Mat frame_gray;
-    Mat crop;
-    Mat res;
-    Mat gray;
-    string text;
-    stringstream sstm;
+    std::vector<cv::Rect> faces;
+    cv::Mat frame_gray;
+    cv::Mat crop;
+    cv::Mat res;
+    cv::Mat gray;
+    std::string text;
+    std::stringstream sstm;
 
-    cvtColor(frame, frame_gray, COLOR_BGR2GRAY);
-    equalizeHist(frame_gray, frame_gray);
+    cv::cvtColor(frame, frame_gray, cv::COLOR_BGR2GRAY);
+    cv::equalizeHist(frame_gray, frame_gray);
 
     // Detect faces
-    face_cascade.detectMultiScale(frame_gray, faces, 1.1, 2, 0 | CASCADE_SCALE_IMAGE, Size(30, 30));
+    face_cascade.detectMultiScale(frame_gray, faces, 1.1, 5, 0 | cv::CASCADE_SCALE_IMAGE, cv::Size(30, 30));
+
 
     // Set Region of Interest
     cv::Rect roi_b;
@@ -84,8 +99,8 @@ void detectAndDisplay(Mat frame)
     int ab = 0; // ab is area of biggest element
 
     for (ic = 0; ic < faces.size(); ic++) // Iterate through all current elements (detected faces)
-
     {
+        std::cout << faces[ic].size() << std::endl;
         roi_c.x = faces[ic].x;
         roi_c.y = faces[ic].y;
         roi_c.width = (faces[ic].width);
@@ -110,28 +125,28 @@ void detectAndDisplay(Mat frame)
         }
 
         crop = frame(roi_b);
-        resize(crop, res, Size(128, 128), 0, 0, INTER_LINEAR); // This will be needed later while saving images
-        cvtColor(crop, gray, CV_BGR2GRAY); // Convert cropped image to Grayscale
+        resize(crop, res, cv::Size(128, 128), 0, 0, cv::INTER_LINEAR); // This will be needed later while saving images
+        cv::cvtColor(crop, gray, CV_BGR2GRAY); // Convert cropped image to Grayscale
 
         // Form a filename
         filename = "";
-        stringstream ssfn;
+        std::stringstream ssfn;
         ssfn << filenumber << ".png";
         filename = ssfn.str();
         filenumber++;
 
-        imwrite(filename, gray);
+        // imwrite(filename, gray);
 
-        Point pt1(faces[ic].x, faces[ic].y); // Display detected faces on main window - live stream from camera
-        Point pt2((faces[ic].x + faces[ic].height), (faces[ic].y + faces[ic].width));
-        rectangle(frame, pt1, pt2, Scalar(0, 255, 0), 2, 8, 0);
+        cv::Point pt1(faces[ic].x, faces[ic].y); // Display detected faces on main window - live stream from camera
+        cv::Point pt2((faces[ic].x + faces[ic].height), (faces[ic].y + faces[ic].width));
+        rectangle(frame, pt1, pt2, cv::Scalar(0, 255, 0), 2, 8, 0);
     }
 
     // Show image
     sstm << "Crop area size: " << roi_b.width << "x" << roi_b.height << " Filename: " << filename;
     text = sstm.str();
 
-    putText(frame, text, cvPoint(30, 30), FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0, 0, 255), 1, CV_AA);
+    putText(frame, text, cvPoint(30, 30), cv::FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0, 0, 255), 1, CV_AA);
     imshow("original", frame);
 
     if (!crop.empty())
@@ -139,5 +154,5 @@ void detectAndDisplay(Mat frame)
         imshow("detected", crop);
     }
     else
-        destroyWindow("detected");
+        cv::destroyWindow("detected");
 }
