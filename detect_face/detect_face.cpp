@@ -46,6 +46,12 @@ int main(void)
             std::cout << "Error when reading next frame" << std::endl;
             exit(-1);
         }
+        bSuccess = cap.read(frame);
+        if (!bSuccess)
+        {
+            std::cout << "Error when reading next frame" << std::endl;
+            exit(-1);
+        }
 
         if (!frame.empty())
         {

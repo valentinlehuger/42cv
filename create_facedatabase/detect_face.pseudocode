@@ -1,0 +1,12 @@
+for filename.jpg in "path/to/imageFolder/":        #OK
+	
+	face_cascade.detectMultiScale(frame_gray, facesDetected, 1.1, 5, 0 | cv::CASCADE_SCALE_IMAGE, cv::Size(30, 30));
+
+	for i, face in enumerate(facesDetected):
+		std:: cout << Is it a face ? : << std::endl;
+		std::cin >> answer;
+		std::cout << std::endl;
+
+		if answer is yes:
+			savePhoto("../resource/persoFaces/filename_%s.jpg", i);
+
