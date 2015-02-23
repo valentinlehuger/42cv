@@ -34,7 +34,6 @@ int main(void)
          return -1;
     }
 
-
     cv::Mat frame;
     bool bSuccess;
 
@@ -141,7 +140,7 @@ void detectAndDisplay(cv::Mat frame)
         filename = ssfn.str();
         filenumber++;
 
-        // imwrite(filename, gray);
+        imwrite(filename, gray);
 
         cv::Point pt1(faces[ic].x, faces[ic].y); // Display detected faces on main window - live stream from camera
         cv::Point pt2((faces[ic].x + faces[ic].height), (faces[ic].y + faces[ic].width));

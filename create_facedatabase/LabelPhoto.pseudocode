@@ -1,8 +1,0 @@
-for filename.jpg in "../../resource/persoFaces/":
-	display(filename.jpg)
-	std:: cout << Enter a label number : << std::endl;
-	std::cin >> number;
-	std::cout << std::endl;
-
-	addline("absolute/path/to/filename.jpg;number");
-
