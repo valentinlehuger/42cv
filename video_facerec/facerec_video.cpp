@@ -10,7 +10,7 @@
 static void read_csv(const std::string& filename, cv::vector<cv::Mat>& images, cv::vector<int>& labels, char separator = ';');
 static void detectAndDisplay(cv::Mat frame);
 
-cv::Ptr<cv::FaceRecognizer> model = cv::createEigenFaceRecognizer();
+cv::Ptr<cv::FaceRecognizer> model = cv::createFisherFaceRecognizer();
 std::string face_cascade_name = "haarcascade_frontalface_alt.xml";
 cv::CascadeClassifier face_cascade;
 
@@ -178,6 +178,8 @@ static void detectAndDisplay(cv::Mat frame)
 			name = "Florent";
        	else if (predicted == 1)
        		name = "Valentin";
+        else if (predicted == 2)
+            name = "Tony";
 
        	std::cout << name << " is detected" << std::endl;
 
