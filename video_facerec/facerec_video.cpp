@@ -6,8 +6,8 @@
 #include <fstream>
 #include <sstream>
 
-
 static void read_csv(const std::string& filename, cv::vector<cv::Mat>& images, cv::vector<int>& labels, char separator = ';');
+static void trainModelFromCsv(int ac, const char **av, cv::vector<cv::Mat> &images, cv::vector<int> &labels);
 static void detectAndDisplay(cv::Mat frame);
 
 cv::Ptr<cv::FaceRecognizer> model = cv::createFisherFaceRecognizer();
@@ -17,25 +17,11 @@ cv::CascadeClassifier face_cascade;
 
 int main(int ac, const char **av) 
 {
-	if (ac != 2)
-	{
-        std::cout << "usage: " << av[0] << " <csv.ext>" << std::endl;
-        return (-1);
-	}
-
     cv::vector<cv::Mat> 		images;
     cv::vector<int> 			labels;
 
-    try
-    {
-        read_csv(std::string(av[1]), images, labels);
-    } catch (cv::Exception& e)
-    {
-        std::cerr << "Error opening file \"" << std::string(av[1]) << "\". Reason: " << e.msg << std::endl;
-        exit(1);
-    }
-
-    model->train(images, labels);
+    // Bouton Train
+    trainModelFromCsv(ac, av, images, labels);
 
     // Load the cascade
     if (!face_cascade.load(face_cascade_name))
@@ -57,12 +43,12 @@ int main(int ac, const char **av)
 
     for (;;)
     {
-        bSuccess = cap.read(frame);
-        if (!bSuccess)
-        {
-            std::cerr << "Error when reading next frame" << std::endl;
-            exit(-1);
-        }
+        // bSuccess = cap.read(frame);
+        // if (!bSuccess)
+        // {
+        //     std::cerr << "Error when reading next frame" << std::endl;
+        //     exit(-1);
+        // }
         bSuccess = cap.read(frame);
         if (!bSuccess)
         {
@@ -87,8 +73,6 @@ int main(int ac, const char **av)
 }
 
 
-
-
 static void read_csv(const std::string& filename, cv::vector<cv::Mat>& images, cv::vector<int>& labels, char separator)
 {
     std::ifstream file(filename.c_str(), std::ifstream::in);
@@ -109,6 +93,26 @@ static void read_csv(const std::string& filename, cv::vector<cv::Mat>& images, c
         }
     }
 }
+
+
+static void          trainModelFromCsv(int ac, const char **av, cv::vector<cv::Mat> &images, cv::vector<int> &labels)
+{
+    if (ac != 2)
+    {
+        std::cout << "usage: " << av[0] << " <csv.ext>" << std::endl;
+        exit (-1);
+    }
+    try
+    {
+        read_csv(std::string(av[1]), images, labels);
+    } catch (cv::Exception& e)
+    {
+        std::cerr << "Error opening file \"" << std::string(av[1]) << "\". Reason: " << e.msg << std::endl;
+        exit(1);
+    }
+    model->train(images, labels);
+}
+
 
 static void detectAndDisplay(cv::Mat frame)
 {
@@ -171,17 +175,19 @@ static void detectAndDisplay(cv::Mat frame)
         cv::cvtColor(crop, crop, CV_BGR2GRAY); // Convert cropped image to Grayscale
 
         predicted = -1;
-       	text = "Nobody";
-       	predicted = model->predict(crop);
+        double confidence = 0.0;
+       	model->predict(crop, predicted, confidence);
+        if (confidence < 3000)
+{               if (predicted == 0)
+                        name = "Florent";
+                       else if (predicted == 1)
+                           name = "Valentin";
+                    else if (predicted == 2)
+                        name = "Tony";
+        }        else
+            name = "Nobody";
 
-       	if (predicted == 0)
-			name = "Florent";
-       	else if (predicted == 1)
-       		name = "Valentin";
-        else if (predicted == 2)
-            name = "Tony";
-
-       	std::cout << name << " is detected" << std::endl;
+       	std::cout << name << " is detected at " << confidence << std::endl;
 
         cv::Point pt1(faces[ic].x, faces[ic].y); // Display detected faces on main window - live stream from camera
         cv::Point pt2((faces[ic].x + faces[ic].height), (faces[ic].y + faces[ic].width));
