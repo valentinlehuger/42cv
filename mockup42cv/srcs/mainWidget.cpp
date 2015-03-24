@@ -6,17 +6,17 @@
 //   By: troussel <troussel@student.42.fr>          +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2015/03/24 13:19:22 by troussel          #+#    #+#             //
-//   Updated: 2015/03/24 15:57:07 by troussel         ###   ########.fr       //
+//   Updated: 2015/03/24 16:32:04 by troussel         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 #include <mainWidget.hpp>
-#include <iostream>//////////
 #include <fakeVidFRec.hpp>//////////
 #include <QApplication>
 #include <QtGui>
 #include <QPushButton>
 #include <QTimer>
+#include <QFileDialog>
 
 mainWidget::mainWidget(QWidget* parent) : QWidget(parent), _vidFRec(new fakeVidFRec()), _timer(new QTimer(this)) /////////
 {
@@ -65,7 +65,12 @@ void		mainWidget::initQuitButton(int posX, int posY, int width, int height)
 
 void		mainWidget::onTrainRequest(void)
 {
-	std::cout << "Train request clicked" << std::endl;
+	QString		file;
+
+	file = QFileDialog::getOpenFileName(this, "Select Files to sned in term...", QDir::homePath(), tr("CSV Files (*.csv)"));
+	if (file.isEmpty())
+		return ;
+	this->_vidFRec->trainModelFromCsv(file.toLocal8Bit().constData());
 	return ;
 }
 
