@@ -6,29 +6,33 @@
 //   By: troussel <troussel@student.42.fr>          +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2015/03/24 13:19:22 by troussel          #+#    #+#             //
-//   Updated: 2015/03/24 14:53:58 by troussel         ###   ########.fr       //
+//   Updated: 2015/03/24 15:57:07 by troussel         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 #include <mainWidget.hpp>
 #include <iostream>//////////
 #include <fakeVidFRec.hpp>//////////
-#include <QtApplication>
+#include <QApplication>
 #include <QtGui>
 #include <QPushButton>
+#include <QTimer>
 
-mainWidget::mainWidget(QWidget* parent) : QWidget(parent), _vidFRec(new fakeVidFRec()) /////////
+mainWidget::mainWidget(QWidget* parent) : QWidget(parent), _vidFRec(new fakeVidFRec()), _timer(new QTimer(this)) /////////
 {
 	this->resize(WIDTH, HEIGHT);
 	this->initTrainButton(PBUTX, PBUTY * 1, PBUTWIDTH, PBUTHEIGHT);
 	this->initVidFRecSwitch(PBUTX, PBUTY * 3, PBUTWIDTH, PBUTHEIGHT);
 	this->initQuitButton(PBUTX, PBUTY * 5, PBUTWIDTH, PBUTHEIGHT);
+	this->_timer->start(10);
+	this->show();
 	return ;
 }
 
 mainWidget::~mainWidget(void)
 {
 	delete this->_vidFRec;
+	delete this->_timer;
 	return ;
 }
 
@@ -67,12 +71,27 @@ void		mainWidget::onTrainRequest(void)
 
 void		mainWidget::toggleVidFRec(void)
 {
-	std::cout << "Toggle Video Face Rec clicked" << std::endl;
+	if (!this->_vidFRecBox.toggle) {
+		connect(this->_timer, SIGNAL(timeout()), this, SLOT(updateFaceRecognition()));
+		this->_vidFRecBox.toggle = true;
+	} else {
+		disconnect(this->_timer, 0, this, 0);
+		this->_vidFRecBox.toggle = false;
+		this->_vidFRecBox.window.close();
+		this->_vidFRec->releaseVideo();
+	}
 	return ;
 }
 
 void		mainWidget::updateFaceRecognition(void)
 {
-	std::cout << "Updt FR" << std::endl;
+	cv::Mat*	mat = this->_vidFRec->getNextFrameRGB();
+	QImage		qimg(mat->data, mat->cols, mat->rows, mat->step, QImage::Format_RGB888);
+	QPixmap		pixmap = QPixmap::fromImage(qimg);
+
+	this->_vidFRecBox.label->setPixmap(pixmap);
+	this->_vidFRecBox.label->resize(pixmap.size());
+	this->_vidFRecBox.window.show();
+	delete mat;
 	return ;
 }

@@ -6,7 +6,7 @@
 //   By: troussel <troussel@student.42.fr>          +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2015/03/24 11:57:08 by troussel          #+#    #+#             //
-//   Updated: 2015/03/24 14:28:43 by troussel         ###   ########.fr       //
+//   Updated: 2015/03/24 15:45:36 by troussel         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -14,22 +14,23 @@
 # define  MAINWIDGET_CLASS_H
 # include <IVidFRec.hpp>
 # include <QWidget>
+# include <QTimer>
 # include <QLabel>
 
-# define BASEUNIT 10
-# define WIDTH BASEUNIT * 8
+# define BASEUNIT 100
+# define WIDTH BASEUNIT * 7
 # define HEIGHT BASEUNIT * 7
 
 # define PBUTWIDTH BASEUNIT * 4
 # define PBUTHEIGHT BASEUNIT * 1
-# define PBUTX WIDTH - PBUTWIDTH
+# define PBUTX (WIDTH - PBUTWIDTH) / 2
 # define PBUTY PBUTHEIGHT
 
 typedef struct	s_ImgBox
 {
 	QWidget		window;
 	QLabel*		label;
-	bool		toggle
+	bool		toggle;
 
 	s_ImgBox(void) : label(new QLabel(&this->window)), toggle(false) {
 		return ;
@@ -45,6 +46,7 @@ class mainWidget : public QWidget
 	Q_OBJECT
 	t_ImgBox	_vidFRecBox;
 	IVidFRec*	_vidFRec;
+	QTimer*		_timer;
 
 	void		initQuitButton(int posX, int posY, int width, int height);
 	void		initTrainButton(int posX, int posY, int width, int height);
