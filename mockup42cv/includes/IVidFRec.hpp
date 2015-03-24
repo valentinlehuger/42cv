@@ -5,9 +5,10 @@
 
 class IVidFRec {
 public:
-  virtual bool		trainModelFromCsv(std::string const pathToCsv) = 0; /* Exception ou retour true/false si erreur, a voir  */
-  virtual cv::Mat*	getNextFrameRGB(void) = 0; /* exception ou retour NULL si erreur, a voir */ /* Le widget principal gere l'affichage et le delete du pointeur */
-  virtual ~IVidFRec(void) {}
+	virtual bool		trainModelFromCsv(std::string const pathToCsv) = 0; /* Exception ou retour true/false si erreur, a voir  */
+	virtual cv::Mat*	getNextFrameRGB(void) = 0; /* exception ou retour NULL si erreur, a voir */ /* Le widget principal gere l'affichage et le delete du pointeur */
+	virtual bool		releaseVideo(void) = 0;
+	virtual ~IVidFRec(void) {}
 };
 
 #endif /* IVIDFREC_INTERFACE_H */
