@@ -6,7 +6,7 @@
 //   By: troussel <troussel@student.42.fr>          +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2015/03/24 11:57:08 by troussel          #+#    #+#             //
-//   Updated: 2015/03/24 13:28:36 by troussel         ###   ########.fr       //
+//   Updated: 2015/03/24 14:28:43 by troussel         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -20,12 +20,18 @@
 # define WIDTH BASEUNIT * 8
 # define HEIGHT BASEUNIT * 7
 
+# define PBUTWIDTH BASEUNIT * 4
+# define PBUTHEIGHT BASEUNIT * 1
+# define PBUTX WIDTH - PBUTWIDTH
+# define PBUTY PBUTHEIGHT
+
 typedef struct	s_ImgBox
 {
 	QWidget		window;
 	QLabel*		label;
+	bool		toggle
 
-	s_ImgBox(void) : label(new QLabel(&this->window)) {
+	s_ImgBox(void) : label(new QLabel(&this->window)), toggle(false) {
 		return ;
 	}
 	~s_ImgBox(void) {
@@ -40,13 +46,13 @@ class mainWidget : public QWidget
 	t_ImgBox	_vidFRecBox;
 	IVidFRec*	_vidFRec;
 
-	void		initQuitButton(int posX, int posY, int width, int height); /************/
-	void		initTrainButton(int posX, int posY, int width, int height); /************/
-	void		initVidFRecSwitch(int posX, int posY, int width, int height); /************/
+	void		initQuitButton(int posX, int posY, int width, int height);
+	void		initTrainButton(int posX, int posY, int width, int height);
+	void		initVidFRecSwitch(int posX, int posY, int width, int height);
 
 public:
-	mainWidget(QWidget *parent = NULL); /************/
-	virtual ~mainWidget(void); /************/
+	mainWidget(QWidget *parent = NULL);
+	virtual ~mainWidget(void);
 
 private slots:
 	void		onTrainRequest(void); /************/
