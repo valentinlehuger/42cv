@@ -11,8 +11,8 @@ DEPENDPATH += . includes srcs
 INCLUDEPATH += . includes
 
 # Input
-HEADERS += includes/fakeVidFRec.hpp \
+HEADERS += includes/VidFRec.hpp \
            includes/IVidFRec.hpp \
            includes/mainWidget.hpp
-SOURCES += srcs/fakeVidFRec.cpp srcs/main.cpp srcs/mainWidget.cpp
+SOURCES += srcs/VidFRec.cpp srcs/main.cpp srcs/mainWidget.cpp
 
