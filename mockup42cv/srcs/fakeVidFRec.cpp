@@ -18,7 +18,7 @@
 
 fakeVidFRec::fakeVidFRec(void)
 {
-    if (!face_cascade.load("haarcascade_frontalface_alt.xml"))
+    if (!face_cascade.load("/nfs/zfs-student-3/users/2013_paris/vlehuger/openProject/github/mockup42cv/haarcascade_frontalface_alt.xml"))
     {
         std::cerr << "--(!)Error loading" << std::endl;
         exit(-1);
@@ -90,7 +90,7 @@ cv::Mat*	fakeVidFRec::getNextFrameRGB(void)
 	this->_cap.read(*mat);
 	cv::cvtColor(*mat, *mat, CV_BGR2RGB);
 
-	// *mat = detectAndDisplay(*mat);
+	*mat = detectAndDisplay(*mat);
 	return (mat);
 }
 
