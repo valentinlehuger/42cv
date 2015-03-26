@@ -26,6 +26,7 @@ mainWidget::mainWidget(QWidget* parent) : QWidget(parent), _vidFRec(new fakeVidF
 	this->initQuitButton(PBUTX, PBUTY * 5, PBUTWIDTH, PBUTHEIGHT);
 	this->_timer->start(10);
 	this->show();
+	this->_vidFRec = new fakeVidFRec();
 	return ;
 }
 
