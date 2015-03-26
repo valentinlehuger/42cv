@@ -6,7 +6,7 @@
 //   By: troussel <troussel@student.42.fr>          +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2015/03/26 13:39:10 by troussel          #+#    #+#             //
-//   Updated: 2015/03/26 13:48:38 by troussel         ###   ########.fr       //
+//   Updated: 2015/03/26 14:05:13 by troussel         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -18,6 +18,7 @@
 # include <opencv2/core/core.hpp>
 # include <opencv2/highgui/highgui.hpp>
 # include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/contrib/contrib.hpp>
 
 class VidFRec : public IVidFRec
 {
@@ -28,6 +29,9 @@ class VidFRec : public IVidFRec
 
 	VidFRec(void);
 
+	void				read_csv(const std::string& filename, cv::vector<cv::Mat>& images, cv::vector<int>& labels, char separator);
+	cv::Mat*			detect(cv::Mat* frame); /***********/
+
 public:
 	VidFRec(std::string const pathToXmlHCascade);
 	virtual ~VidFRec(void);
@@ -35,7 +39,7 @@ public:
 	bool				openCamera(void);
 	bool				releaseVideo(void);
 	bool				trainModelFromCsv(std::string const pathToCsv);
-	cv::Mat*			getNextFrameRGB(void);
+	cv::Mat*			getNextFrameRGB(void); /*******/
 };
 
 #endif /* VIDFREC_CLASS_H */
