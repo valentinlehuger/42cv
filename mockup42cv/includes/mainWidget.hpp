@@ -6,7 +6,7 @@
 //   By: troussel <troussel@student.42.fr>          +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2015/03/24 11:57:08 by troussel          #+#    #+#             //
-//   Updated: 2015/03/24 15:45:36 by troussel         ###   ########.fr       //
+//   Updated: 2015/03/26 14:18:29 by troussel         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -53,13 +53,13 @@ class mainWidget : public QWidget
 	void		initVidFRecSwitch(int posX, int posY, int width, int height);
 
 public:
-	mainWidget(QWidget *parent = NULL);
+	mainWidget(std::string const pathToXmlHCascade, QWidget *parent = NULL);
 	virtual ~mainWidget(void);
 
 private slots:
-	void		onTrainRequest(void); /************/
-	void		toggleVidFRec(void); /************/
-	void		updateFaceRecognition(void); /************/
+	void		onTrainRequest(void);
+	void		toggleVidFRec(void);
+	void		updateFaceRecognition(void);
 };
 
 #endif /* MAINWIDGET_CLASS_H */

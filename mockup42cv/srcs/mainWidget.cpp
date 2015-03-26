@@ -6,19 +6,19 @@
 //   By: troussel <troussel@student.42.fr>          +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2015/03/24 13:19:22 by troussel          #+#    #+#             //
-//   Updated: 2015/03/24 16:32:04 by troussel         ###   ########.fr       //
+//   Updated: 2015/03/26 14:18:01 by troussel         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 #include <mainWidget.hpp>
-#include <fakeVidFRec.hpp>//////////
+#include <VidFRec.hpp>
 #include <QApplication>
 #include <QtGui>
 #include <QPushButton>
 #include <QTimer>
 #include <QFileDialog>
 
-mainWidget::mainWidget(QWidget* parent) : QWidget(parent), _vidFRec(new fakeVidFRec()), _timer(new QTimer(this)) /////////
+mainWidget::mainWidget(std::string const pathToXmlHCascade, QWidget* parent) : QWidget(parent), _vidFRec(new VidFRec(pathToXmlHCascade)), _timer(new QTimer(this))
 {
 	this->resize(WIDTH, HEIGHT);
 	this->initTrainButton(PBUTX, PBUTY * 1, PBUTWIDTH, PBUTHEIGHT);
@@ -91,6 +91,10 @@ void		mainWidget::toggleVidFRec(void)
 void		mainWidget::updateFaceRecognition(void)
 {
 	cv::Mat*	mat = this->_vidFRec->getNextFrameRGB();
+
+	if (mat == NULL)
+		return ;
+
 	QImage		qimg(mat->data, mat->cols, mat->rows, mat->step, QImage::Format_RGB888);
 	QPixmap		pixmap = QPixmap::fromImage(qimg);
 

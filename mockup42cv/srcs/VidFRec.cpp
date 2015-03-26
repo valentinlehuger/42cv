@@ -6,7 +6,7 @@
 //   By: troussel <troussel@student.42.fr>          +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2015/03/26 13:49:41 by troussel          #+#    #+#             //
-//   Updated: 2015/03/26 14:10:12 by troussel         ###   ########.fr       //
+//   Updated: 2015/03/26 14:21:50 by troussel         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -84,7 +84,7 @@ bool		VidFRec::trainModelFromCsv(std::string const pathToCsv)
 	std::cout << "I train with " << pathToCsv << std::endl;
     try
     {
-        this->read_csv(pathToCsv, images, labels);
+        this->read_csv(pathToCsv, images, labels, ';');
     } catch (cv::Exception& e)
     {
         std::cerr << "Error opening file \"" << pathToCsv << "\". Reason: " << e.msg << std::endl;
@@ -163,7 +163,7 @@ cv::Mat*	VidFRec::detect(cv::Mat* frame)
             roi_b.height = (faces[ib].height);
         }
 
-        crop = frame(roi_c);
+        crop = frame[0](roi_c);
 
         resize(crop, crop, cv::Size(200, 200)); // This will be needed later while saving images
         cv::cvtColor(crop, crop, CV_BGR2GRAY); // Convert cropped image to Grayscale
