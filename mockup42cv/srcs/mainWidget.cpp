@@ -6,7 +6,7 @@
 //   By: troussel <troussel@student.42.fr>          +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2015/03/24 13:19:22 by troussel          #+#    #+#             //
-//   Updated: 2015/03/24 16:32:04 by troussel         ###   ########.fr       //
+//   Updated: 2015/03/26 12:56:23 by troussel         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -26,7 +26,6 @@ mainWidget::mainWidget(QWidget* parent) : QWidget(parent), _vidFRec(new fakeVidF
 	this->initQuitButton(PBUTX, PBUTY * 5, PBUTWIDTH, PBUTHEIGHT);
 	this->_timer->start(10);
 	this->show();
-	this->_vidFRec = new fakeVidFRec();
 	return ;
 }
 
