@@ -6,7 +6,7 @@
 //   By: troussel <troussel@student.42.fr>          +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2015/03/24 15:03:51 by troussel          #+#    #+#             //
-//   Updated: 2015/03/26 14:13:21 by troussel         ###   ########.fr       //
+//   Updated: 2015/03/26 14:31:20 by troussel         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -26,6 +26,6 @@ int		main(int ac, char **av)
 		return (-1);
 	}
 	box = new mainWidget(av[1]);
-	delete box;
+	//delete box; // Pas de delete ! sinon y'a rien qui s'affiche. Qt...
 	return app.exec();
 }

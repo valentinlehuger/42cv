@@ -6,7 +6,7 @@
 //   By: troussel <troussel@student.42.fr>          +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2015/03/24 13:19:22 by troussel          #+#    #+#             //
-//   Updated: 2015/03/26 14:18:01 by troussel         ###   ########.fr       //
+//   Updated: 2015/03/26 14:30:14 by troussel         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -17,6 +17,8 @@
 #include <QPushButton>
 #include <QTimer>
 #include <QFileDialog>
+#include <unistd.h>
+#include <iostream>
 
 mainWidget::mainWidget(std::string const pathToXmlHCascade, QWidget* parent) : QWidget(parent), _vidFRec(new VidFRec(pathToXmlHCascade)), _timer(new QTimer(this))
 {
