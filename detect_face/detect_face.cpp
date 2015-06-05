@@ -2,23 +2,35 @@
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
 
+#include <sys/stat.h>
+
 #include <iostream>
 #include <stdio.h>
 
 // Function Headers
-void detectAndDisplay(cv::Mat frame);
+void detectAndDisplay(cv::Mat frame, std::string dst_directory);
 
 // Global variables
 // Copy this file from opencv/data/haarscascades to target folder
-std::string face_cascade_name = "haarcascade_frontalface_alt.xml";
+std::string face_cascade_name = "haarcascade_frontalface_alt2.xml";
 cv::CascadeClassifier face_cascade;
 std::string window_name = "Capture - Face detection";
 int filenumber; // Number of file to be saved
 std::string filename;
 
 // Function main
-int main(void)
+int main(int ac, char **av)
 {
+    std::string     dst_directory;
+
+    if (ac > 1)
+        dst_directory = std::string(av[1]);
+    else
+        dst_directory = "unknown";
+ 
+    if (mkdir(dst_directory.c_str(), 0755))
+        perror(dst_directory.c_str());
+
     // Load the cascade
     if (!face_cascade.load(face_cascade_name))
     {
@@ -40,11 +52,8 @@ int main(void)
     for (;;)
     {
         bSuccess = cap.read(frame);
-        if (!bSuccess)
-        {
-            std::cout << "Error when reading next frame" << std::endl;
-            exit(-1);
-        }
+        bSuccess = cap.read(frame);
+        bSuccess = cap.read(frame);
         bSuccess = cap.read(frame);
         if (!bSuccess)
         {
@@ -54,7 +63,7 @@ int main(void)
 
         if (!frame.empty())
         {
-            detectAndDisplay(frame);
+            detectAndDisplay(frame, dst_directory);
         }
         else
         {
@@ -76,7 +85,7 @@ int main(void)
 }
 
 // Function detectAndDisplay
-void detectAndDisplay(cv::Mat frame)
+void detectAndDisplay(cv::Mat frame, std::string dst_directory)
 {
     std::vector<cv::Rect> faces;
     cv::Mat frame_gray;
@@ -140,7 +149,9 @@ void detectAndDisplay(cv::Mat frame)
         filename = ssfn.str();
         filenumber++;
 
-        imwrite(filename, gray);
+        cv::resize(gray, gray, cv::Size(200, 200));
+
+        imwrite(dst_directory + "/" + filename, gray);
 
         cv::Point pt1(faces[ic].x, faces[ic].y); // Display detected faces on main window - live stream from camera
         cv::Point pt2((faces[ic].x + faces[ic].height), (faces[ic].y + faces[ic].width));
